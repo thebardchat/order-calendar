@@ -1,0 +1,14 @@
+[
+  {
+    "pickup": "Mount Hope",
+    "material": "57 Stone",
+    "dropoff": "Plant 511",
+    "time": "5:00 AM"
+  },
+  {
+    "pickup": "Cherokee",
+    "material": "Man Sand",
+    "dropoff": "Plant 908",
+    "time": "6:15 AM"
+  }
+]
