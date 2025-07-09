@@ -1,7 +1,51 @@
 <!DOCTYPE html>
-<html>
-<head><title>Dispatch Schedule</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Delivery Schedule</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; background: #f8f8f8; }
+    h1 { color: #333; }
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #333; color: white; }
+    tr:nth-child(even) { background: #f2f2f2; }
+  </style>
+</head>
 <body>
-  <h1>Schedule Viewer Coming Soon</h1>
+  <h1>Dispatch Orders</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Pickup</th>
+        <th>Material</th>
+        <th>Drop-off</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody id="orderTable"></tbody>
+  </table>
+
+  <script>
+    fetch("/orders")
+      .then(res => res.json())
+      .then(data => {
+        const table = document.getElementById("orderTable");
+        data.forEach(order => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${order.pickup}</td>
+            <td>${order.material}</td>
+            <td>${order.dropoff}</td>
+            <td>${order.time}</td>
+          `;
+          table.appendChild(row);
+        });
+      })
+      .catch(err => {
+        console.error("Error loading schedule:", err);
+        document.body.innerHTML += "<p style='color:red;'>Failed to load orders.</p>";
+      });
+  </script>
 </body>
 </html>
