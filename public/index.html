@@ -1,63 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Order Schedule</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dispatch Orders</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: #f9f9f9;
       padding: 20px;
     }
-    h1 {
+    h2 {
+      margin-top: 30px;
       text-align: center;
+    }
+    .note-box {
+      background: #fff;
+      border-left: 5px solid gold;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .note-box h3 {
+      margin-top: 0;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
+      padding: 12px 15px;
+      border: 1px solid #ccc;
       text-align: left;
     }
     th {
-      background-color: #4285f4;
-      color: white;
+      background: #4285f4;
+      color: #fff;
     }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    .load-badge {
-      background: #4caf50;
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      background: #4285f4;
       color: white;
-      padding: 3px 7px;
-      border-radius: 5px;
-      font-weight: bold;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
-  <div style="background:fffcce; padding:1em; margin-bottom:1em; border-left:6px solid #ffcc00;">
-    <strong>Dispatch Brain To-Do:</strong>
-    <ul style=""margin-top:0.5em;">
-    <li><strong>(Pickup)</strong> Add driver names to orders (and table layout)</li>
-  <li><strong>(Material)</strong>Add editing, <strong>deleting</strong>, maybe by grouping by time</li>
-<li><strong>(Drop-off)</strong> Automate loads by shift, route, or brainwave</li>
-</ul>
-</div>
-  <div style="background:fffcce; padding:1em; margin-bottom:1em; border-left:6px solid #ffcc00;">
-    <strong>Dispatch Brain Notes:</strong>
-    <ul style="margin-top:0.5em;">
+
+  <div class="note-box">
+    <h3>Dispatch Brain To-Do:</h3>
+    <ul>
+      <li><strong>(Pickup)</strong> Add driver names to orders (and table layout)</li>
+      <li><strong>(Material)</strong> Add editing, <strong>deleting</strong>, maybe by grouping by time</li>
+      <li><strong>(Drop-off)</strong> Automate loads by shift, route, or brainwave 💡</li>
+    </ul>
+  </div>
+
+  <div class="note-box">
+    <h3>Dispatch Brain Notes:</h3>
+    <ul>
       <li>Orders are fetched from the server and displayed in a table.</li>
       <li>Each order shows pickup, material, dropoff, time, and loads.</li>
       <li>Loads are displayed as badges for better visibility.</li>
     </ul>
-</div>
-  <h1>Today's Orders</h1>
-  <table>
+  </div>
+
+  <h2>Today's Orders</h2>
+  <table id="orders-table">
     <thead>
       <tr>
         <th>Pickup</th>
@@ -67,26 +78,30 @@
         <th>Loads</th>
       </tr>
     </thead>
-    <tbody id="orders-body"></tbody>
+    <tbody></tbody>
   </table>
 
   <script>
-    fetch('/orders')
-      .then(res => res.json())
-      .then(data => {
-        const tbody = document.getElementById('orders-body');
-        data.forEach(order => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${order.pickup}</td>
-            <td>${order.material}</td>
-            <td>${order.dropoff}</td>
-            <td>${order.time}</td>
-            <td><span class="load-badge">${order.loads || 1}</span></td>
-          `;
-          tbody.appendChild(row);
-        });
+    async function fetchOrders() {
+      const res = await fetch("/orders");
+      const orders = await res.json();
+      const tbody = document.querySelector("#orders-table tbody");
+
+      orders.forEach(order => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${order.pickup}</td>
+          <td>${order.material}</td>
+          <td>${order.dropoff}</td>
+          <td>${order.time}</td>
+          <td><span class="badge">${order.loads || 1}</span></td>
+        `;
+        tbody.appendChild(tr);
       });
+    }
+
+    fetchOrders();
   </script>
+
 </body>
 </html>
