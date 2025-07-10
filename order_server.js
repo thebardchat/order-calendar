@@ -1,26 +1,32 @@
-const express = require("express");
-const fs = require("fs");
+const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static('public'));
 app.use(express.json());
-app.use(express.static('public'))
 
-let orders = []; // In-memory store, just for example
+let orders = [];
 
-app.get("/orders", (req, res) => {
+app.get('/orders', (req, res) => {
   res.json(orders);
 });
 
-app.post("/new-order", (req, res) => {
-  const { pickup, material, dropoff, time } = req.body;
+app.post('/new-order', (req, res) => {
+  const { pickup, material, dropoff, time, driver, loads } = req.body;
   if (!pickup || !material || !dropoff || !time) {
-    return res.status(400).json({ status: "Missing required fields" });
+    return res.status(400).json({ error: 'Missing required fields.' });
   }
-
-  orders.push({ pickup, material, dropoff, time });
-  res.json({ status: "Order saved" });
+  orders.push({
+    pickup,
+    material,
+    dropoff,
+    time,
+    driver: driver || '—',
+    loads: loads || 1
+  });
+  res.json({ status: 'Order added' });
 });
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Order server running at http://localhost:${PORT}`);
+  console.log(`🚛 Order server running on port ${PORT}`);
 });
