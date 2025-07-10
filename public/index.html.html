@@ -44,10 +44,11 @@
   <table>
     <thead>
       <tr>
+        <th>Driver</th>
+        <th>Time</th>
         <th>Pickup</th>
         <th>Material</th>
         <th>Dropoff</th>
-        <th>Time</th>
         <th>Loads</th>
       </tr>
     </thead>
@@ -62,10 +63,11 @@
         data.forEach(order => {
           const row = document.createElement('tr');
           row.innerHTML = `
+            <td>${order.driver}</td>
+            <td>${order.time}</td>
             <td>${order.pickup}</td>
             <td>${order.material}</td>
             <td>${order.dropoff}</td>
-            <td>${order.time}</td>
             <td><span class="load-badge">${order.loads || 1}</span></td>
           `;
           tbody.appendChild(row);
